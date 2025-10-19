@@ -10,3 +10,4 @@
 4. Cambiar las variables
 5. Levantar base de datos con ```docker-compose up -d```
 6. Iniciar modo desarrollo ```npm run start:dev```
+7. Ejecutar seeder para tener productos ```http://localhost:3000/seed```
