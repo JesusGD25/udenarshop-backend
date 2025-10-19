@@ -3,7 +3,7 @@
 /node_modules
 /build
 /postgres
-
+CATEGORIES-API.md
 .env
 # Logs
 logs

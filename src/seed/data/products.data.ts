@@ -2,10 +2,10 @@ import { ProductCondition } from '../../products/enums/product-condition.enum';
 
 /**
  * Interfaz para los datos de seed de productos
+ * Nota: sellerId se asignará dinámicamente en el seed service
  */
 interface SeedProduct {
   title: string;
-  slug?: string;
   description: string;
   price: number;
   condition: ProductCondition;

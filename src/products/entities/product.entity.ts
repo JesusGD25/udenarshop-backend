@@ -4,10 +4,20 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  JoinColumn,
+  ManyToOne,
+  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
 import { ProductCondition } from '../enums/product-condition.enum';
+import { User } from '../../users/entities/user.entity';
+import { Category } from '../../categories/entities/category.entity';
+import { CartItem } from '../../cart-item/entities/cart-item.entity';
+import { OrderItem } from '../../order-items/entities/order-item.entity';
+import { Favorite } from '../../favorites/entities/favorite.entity';
+import { Review } from '../../reviews/entities/review.entity';
+import { Chat } from '../../chat/entities/chat.entity';
 
 /**
  * Entidad Product - Representa un artículo publicado para la venta
@@ -39,17 +49,6 @@ export class Product {
   })
   description: string;
 
-  /**
-   * Precio del producto en Pesos Colombianos (COP)
-   * - Tipo decimal sin decimales (pesos colombianos no usan centavos)
-   * - Precisión: hasta 12 dígitos (ej: 999,999,999,999)
-   * - Por defecto 0
-   * 
-   * Ejemplos de precios en COP:
-   * - Producto económico: 50000 ($50.000 COP)
-   * - Producto medio: 500000 ($500.000 COP)
-   * - Producto costoso: 5000000 ($5.000.000 COP)
-   */
   @Column('decimal', {
     precision: 12,
     scale: 0,
@@ -85,6 +84,46 @@ export class Product {
   isSold: boolean;
 
   /**
+   * Calificación promedio del producto
+   * Calculada automáticamente desde las reviews
+   * Rango: 0.0 - 5.0
+   */
+  @Column('decimal', {
+    precision: 2,
+    scale: 1,
+    default: 0.0,
+  })
+  rating: number;
+
+  /**
+   * Cantidad total de reseñas del producto
+   * Se incrementa automáticamente al recibir reviews
+   */
+  @Column('int', {
+    default: 0,
+  })
+  totalReviews: number;
+
+  /**
+   * Contador de visualizaciones del producto
+   * Se incrementa cada vez que alguien ve el detalle
+   */
+  @Column('int', {
+    default: 0,
+  })
+  viewsCount: number;
+
+  /**
+   * Estado de la publicación
+   * false = producto pausado/oculto
+   * true = producto visible en el marketplace
+   */
+  @Column('boolean', {
+    default: true,
+  })
+  isActive: boolean;
+
+  /**
    * Fecha de creación del registro
    * Se genera automáticamente al crear el producto
    */
@@ -104,6 +143,88 @@ export class Product {
     onUpdate: 'CURRENT_TIMESTAMP',
   })
   updatedAt: Date;
+
+  // ==========================================
+  // FOREIGN KEYS
+  // ==========================================
+
+  /**
+   * ID del vendedor (usuario que publicó el producto)
+   */
+  @Column('uuid')
+  sellerId: string;
+
+  /**
+   * ID de la categoría a la que pertenece el producto
+   */
+  @Column('uuid', {
+    nullable: true,
+  })
+  categoryId: string;
+
+  // ==========================================
+  // RELACIONES
+  // ==========================================
+
+  /**
+   * Vendedor del producto (Usuario que lo publicó)
+   */
+  @ManyToOne(() => User, (user) => user.products, {
+    eager: false,
+  })
+  @JoinColumn({ name: 'sellerId' })
+  seller: User;
+
+  /**
+   * Categoría a la que pertenece el producto
+   */
+  @ManyToOne(() => Category, (category) => category.products, {
+    eager: false,
+  })
+  @JoinColumn({ name: 'categoryId' })
+  category: Category;
+
+  // TODO: Descomentar cuando se implementen las entidades relacionadas
+
+  /**
+   * Productos marcados como favoritos
+   */
+  @OneToMany(() => Favorite, (favorite) => favorite.product)
+  favorites: Favorite[];
+
+  /**
+   * Items de carrito que incluyen este producto
+   */
+  @OneToMany(() => CartItem, (cartItem) => cartItem.product)
+  cartItems: CartItem[];
+
+  /**
+   * Items de orden que incluyen este producto
+   */
+  @OneToMany(() => OrderItem, (orderItem) => orderItem.product)
+  orderItems: OrderItem[];
+
+  /**
+   * Chats relacionados con este producto
+   */
+  @OneToMany(() => Chat, (chat) => chat.product)
+  chats: Chat[];
+
+  /**
+   * Reseñas del producto
+   */
+  @OneToMany(() => Review, (review) => review.product)
+  reviews: Review[];
+
+  // /**
+  //  * Reportes del producto
+  //  */
+  // @OneToMany(() => Report, (report) => report.reportedProduct)
+  // reports: Report[];
+
+  // ==========================================
+  // HOOKS
+  // ==========================================
 
   /**
    * Hook que se ejecuta antes de insertar un nuevo producto
