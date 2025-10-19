@@ -1,0 +1,417 @@
+# ============================================
+# EJEMPLOS DE PRODUCTOS CON PRECIOS EN COP
+# shopudenar - Marketplace API
+# ============================================
+
+## IMPORTANTE: 
+## - Endpoint: POST http://localhost:3000/products
+## - Headers: Content-Type: application/json
+
+
+# ============================================
+# EJEMPLO 1: iPhone - Producto Premium
+# ============================================
+
+{
+  "title": "iPhone 13 Pro Max 256GB",
+  "price": 4500000,
+  "description": "iPhone 13 Pro Max de 256GB, color azul pacífico. Excelente estado, con caja y accesorios originales.",
+  "condition": "new",
+  "stock": 1
+}
+# Precio: $4.500.000 COP (cuatro millones quinientos mil pesos)
+
+
+# ============================================
+# EJEMPLO 2: MacBook - Producto Usado
+# ============================================
+
+{
+  "title": "MacBook Pro 2020 M1 8GB RAM",
+  "slug": "macbook-pro-2020-m1",
+  "description": "MacBook Pro 2020 con chip M1, 8GB RAM, 256GB SSD. En excelente estado, sin rayones. Incluye cargador original.",
+  "price": 5200000,
+  "condition": "used",
+  "images": [
+    "https://picsum.photos/400/400?random=1",
+    "https://picsum.photos/400/400?random=2"
+  ],
+  "stock": 1
+}
+# Precio: $5.200.000 COP (cinco millones doscientos mil pesos)
+
+
+# ============================================
+# EJEMPLO 3: AirPods - Electrónica Nuevo
+# ============================================
+
+{
+  "title": "AirPods Pro 2da Generación",
+  "description": "AirPods Pro sellados. Con cancelación de ruido activa, audio espacial y resistencia al agua.",
+  "price": 1100000,
+  "condition": "new",
+  "images": [
+    "https://picsum.photos/400/400?random=4",
+    "https://picsum.photos/400/400?random=5"
+  ],
+  "stock": 3
+}
+# Precio: $1.100.000 COP (un millón cien mil pesos)
+
+
+# ============================================
+# EJEMPLO 4: Ropa - Producto Económico
+# ============================================
+
+{
+  "title": "Chaqueta Nike Original Talla M",
+  "description": "Chaqueta Nike deportiva, color negro, talla M. Poco uso, en muy buen estado. Material impermeable.",
+  "price": 180000,
+  "condition": "used",
+  "images": [
+    "https://picsum.photos/400/400?random=6"
+  ],
+  "stock": 1
+}
+# Precio: $180.000 COP (ciento ochenta mil pesos)
+
+
+# ============================================
+# EJEMPLO 5: Muebles para Hogar
+# ============================================
+
+{
+  "title": "Escritorio de Madera para Estudio",
+  "description": "Escritorio de madera maciza, color café. Dimensiones: 120cm x 60cm x 75cm. Incluye 3 cajones. Perfecto para home office o estudio.",
+  "price": 650000,
+  "condition": "used",
+  "images": [
+    "https://picsum.photos/400/400?random=7",
+    "https://picsum.photos/400/400?random=8"
+  ],
+  "stock": 1
+}
+# Precio: $650.000 COP (seiscientos cincuenta mil pesos)
+
+
+# ============================================
+# EJEMPLO 6: Libros - Educación
+# ============================================
+
+{
+  "title": "Libro Clean Code Robert Martin",
+  "description": "Libro de programación 'Clean Code' de Robert C. Martin. En español, pasta blanda. Excelente estado.",
+  "price": 95000,
+  "condition": "used",
+  "stock": 5
+}
+# Precio: $95.000 COP (noventa y cinco mil pesos)
+
+
+# ============================================
+# EJEMPLO 7: Deportes
+# ============================================
+
+{
+  "title": "Balón de Fútbol Adidas Champions League",
+  "description": "Balón oficial replica Champions League 2024. Tamaño 5, nuevo sin uso. Material de alta calidad.",
+  "price": 145000,
+  "condition": "new",
+  "images": [
+    "https://picsum.photos/400/400?random=9"
+  ],
+  "stock": 10
+}
+# Precio: $145.000 COP (ciento cuarenta y cinco mil pesos)
+
+
+# ============================================
+# EJEMPLO 8: Videojuegos - Gaming
+# ============================================
+
+{
+  "title": "PlayStation 5 God of War Ragnarök",
+  "description": "Juego God of War Ragnarök para PS5. Sellado, nunca abierto. Incluye código de contenido adicional.",
+  "price": 250000,
+  "condition": "new",
+  "images": [
+    "https://picsum.photos/400/400?random=10",
+    "https://picsum.photos/400/400?random=11"
+  ],
+  "stock": 2
+}
+# Precio: $250.000 COP (doscientos cincuenta mil pesos)
+
+
+# ============================================
+# EJEMPLO 9: Accesorios Económicos
+# ============================================
+
+{
+  "title": "Reloj Casio Digital Vintage F-91W",
+  "description": "Reloj Casio F-91W, modelo clásico vintage. Funciona perfectamente, batería nueva. Correa original.",
+  "price": 65000,
+  "condition": "used",
+  "images": [
+    "https://picsum.photos/400/400?random=12"
+  ],
+  "stock": 1
+}
+# Precio: $65.000 COP (sesenta y cinco mil pesos)
+
+
+# ============================================
+# EJEMPLO 10: Hogar - Iluminación
+# ============================================
+
+{
+  "title": "Lámpara LED de Escritorio Regulable",
+  "description": "Lámpara LED moderna con 3 niveles de brillo y temperatura de color ajustable. Cable USB incluido.",
+  "price": 120000,
+  "condition": "new",
+  "images": [
+    "https://picsum.photos/400/400?random=13",
+    "https://picsum.photos/400/400?random=14"
+  ],
+  "stock": 7
+}
+# Precio: $120.000 COP (ciento veinte mil pesos)
+
+
+# ============================================
+# EJEMPLO 11: Instrumento Musical
+# ============================================
+
+{
+  "title": "Guitarra Acústica Yamaha F310",
+  "description": "Guitarra acústica para principiantes. Incluye funda acolchada y afinador digital. Cuerdas nuevas.",
+  "price": 520000,
+  "condition": "used",
+  "images": [
+    "https://picsum.photos/400/400?random=15",
+    "https://picsum.photos/400/400?random=16"
+  ],
+  "stock": 1
+}
+# Precio: $520.000 COP (quinientos veinte mil pesos)
+
+
+# ============================================
+# EJEMPLO 12: Bicicleta de Montaña
+# ============================================
+
+{
+  "title": "Bicicleta de Montaña Rin 29 - 21 Velocidades",
+  "description": "Bicicleta de montaña rin 29, 21 velocidades Shimano. Suspensión delantera, frenos de disco. Bien mantenida.",
+  "price": 1450000,
+  "condition": "used",
+  "images": [
+    "https://picsum.photos/400/400?random=18"
+  ],
+  "stock": 1
+}
+# Precio: $1.450.000 COP (un millón cuatrocientos cincuenta mil pesos)
+
+
+# ============================================
+# EJEMPLO 13: Cámara Profesional
+# ============================================
+
+{
+  "title": "Cámara Canon EOS Rebel T7 con Lente",
+  "description": "Cámara DSLR Canon EOS Rebel T7 con lente 18-55mm. Incluye estuche, tarjeta SD 32GB y correa.",
+  "price": 1850000,
+  "condition": "used",
+  "images": [
+    "https://picsum.photos/400/400?random=19",
+    "https://picsum.photos/400/400?random=20"
+  ],
+  "stock": 1
+}
+# Precio: $1.850.000 COP (un millón ochocientos cincuenta mil pesos)
+
+
+# ============================================
+# EJEMPLO 14: Tablet Samsung
+# ============================================
+
+{
+  "title": "Samsung Galaxy Tab A8 64GB WiFi",
+  "description": "Tablet Samsung Galaxy Tab A8, pantalla 10.5 pulgadas, 64GB almacenamiento, 4GB RAM. Sellada con garantía.",
+  "price": 850000,
+  "condition": "new",
+  "images": [
+    "https://picsum.photos/400/400?random=21"
+  ],
+  "stock": 4
+}
+# Precio: $850.000 COP (ochocientos cincuenta mil pesos)
+
+
+# ============================================
+# EJEMPLO 15: Tenis Deportivos
+# ============================================
+
+{
+  "title": "Tenis Adidas Ultraboost 22 Talla 42",
+  "description": "Tenis Adidas Ultraboost 22, color negro con detalles blancos. Talla 42 (US 9). Nuevos en caja original.",
+  "price": 750000,
+  "condition": "new",
+  "images": [
+    "https://picsum.photos/400/400?random=22",
+    "https://picsum.photos/400/400?random=23"
+  ],
+  "stock": 2
+}
+# Precio: $750.000 COP (setecientos cincuenta mil pesos)
+
+
+# ============================================
+# EJEMPLO 16: Consola de Videojuegos
+# ============================================
+
+{
+  "title": "Nintendo Switch OLED 64GB",
+  "description": "Nintendo Switch modelo OLED con pantalla mejorada. Incluye dock, controles Joy-Con y todos los cables.",
+  "price": 1650000,
+  "condition": "new",
+  "stock": 3
+}
+# Precio: $1.650.000 COP (un millón seiscientos cincuenta mil pesos)
+
+
+# ============================================
+# EJEMPLO 17: Audífonos Premium
+# ============================================
+
+{
+  "title": "Sony WH-1000XM5 Noise Cancelling",
+  "description": "Audífonos inalámbricos Sony con cancelación de ruido. Batería 30 horas. Excelente calidad de sonido.",
+  "price": 1350000,
+  "condition": "new",
+  "stock": 2
+}
+# Precio: $1.350.000 COP (un millón trescientos cincuenta mil pesos)
+
+
+# ============================================
+# EJEMPLO 18: Smartwatch
+# ============================================
+
+{
+  "title": "Apple Watch Series 8 GPS 45mm",
+  "description": "Apple Watch Series 8, caja de aluminio color medianoche. GPS, resistente al agua. Incluye correa deportiva.",
+  "price": 1800000,
+  "condition": "new",
+  "stock": 1
+}
+# Precio: $1.800.000 COP (un millón ochocientos mil pesos)
+
+
+# ============================================
+# EJEMPLOS DE VALIDACIONES QUE FALLARÁN
+# ============================================
+
+# ❌ FALLO: Precio con decimales (COP no usa centavos)
+{
+  "title": "Producto de prueba",
+  "price": 50000.50
+}
+# Error: "price must be an integer number"
+
+
+# ❌ FALLO: Precio negativo
+{
+  "title": "Producto de prueba",
+  "price": -50000
+}
+# Error: "price must be a positive number"
+
+
+# ❌ FALLO: Precio en cero
+{
+  "title": "Producto de prueba",
+  "price": 0
+}
+# Error: "price must be a positive number"
+
+
+# ============================================
+# EJEMPLOS DE ACTUALIZACIÓN CON PRECIOS COP
+# ============================================
+
+# Endpoint: PATCH http://localhost:3000/products/{id-o-slug}
+
+# Ejemplo 1: Actualizar solo precio (rebaja)
+{
+  "price": 3900000
+}
+# Nueva precio: $3.900.000 COP
+
+# Ejemplo 2: Actualizar por SLUG - Cambiar precio y stock
+PATCH http://localhost:3000/products/iphone-13-pro-max-256gb
+{
+  "price": 4200000,
+  "stock": 0,
+  "isSold": true
+}
+
+# Ejemplo 3: Actualizar por UUID - Agregar imágenes
+PATCH http://localhost:3000/products/550e8400-e29b-41d4-a716-446655440000
+{
+  "images": [
+    "https://picsum.photos/400/400?random=30",
+    "https://picsum.photos/400/400?random=31"
+  ]
+}
+
+
+# ============================================
+# RANGOS DE PRECIOS TÍPICOS EN COP
+# ============================================
+
+Categoría              Rango de Precios (COP)
+--------------------------------------------------
+Accesorios pequeños    $20.000 - $150.000
+Ropa y calzado         $80.000 - $800.000
+Libros y material      $30.000 - $200.000
+Electrónica básica     $200.000 - $1.500.000
+Smartphones            $800.000 - $5.000.000
+Computadores           $1.500.000 - $10.000.000
+Muebles                $300.000 - $3.000.000
+Deportes               $100.000 - $2.000.000
+Gaming (consolas)      $1.200.000 - $3.500.000
+
+
+# ============================================
+# NOTAS IMPORTANTES SOBRE PRECIOS COP
+# ============================================
+
+1. ✅ Los precios NO llevan decimales (COP no tiene centavos)
+2. ✅ Usa números enteros: 50000, 1500000, 25000000
+3. ❌ NO uses: 50000.00, 1500000.50
+4. ✅ Mínimo precio: 1 (un peso colombiano)
+5. ✅ Máximo precio: 999999999999 (casi un billón)
+6. 💡 Para mostrar al usuario: usa formato con puntos
+   - En BD: 1500000
+   - Al mostrar: $1.500.000 COP
+7. 💡 Salario mínimo en Colombia (2024): ~$1.300.000
+
+# ============================================
+# FORMATO DE VISUALIZACIÓN (FRONTEND)
+# ============================================
+
+// En el frontend, puedes formatear así:
+const formatCOP = (price) => {
+  return new Intl.NumberFormat('es-CO', {
+    style: 'currency',
+    currency: 'COP',
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 0
+  }).format(price);
+};
+
+// Ejemplos:
+formatCOP(1500000)  // → "$1.500.000"
+formatCOP(50000)    // → "$50.000"
+formatCOP(3500000)  // → "$3.500.000"
