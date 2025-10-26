@@ -1,26 +1,54 @@
-import { Injectable } from '@nestjs/common';
-import { CreateAuthDto } from './dto/create-auth.dto';
-import { UpdateAuthDto } from './dto/update-auth.dto';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import * as bcrypt from 'bcrypt';
+import { User } from '../users/entities/user.entity';
+import { LoginDto } from './dto/login.dto';
 
 @Injectable()
 export class AuthService {
-  create(createAuthDto: CreateAuthDto) {
-    return 'This action adds a new auth';
-  }
+  constructor(
+    @InjectRepository(User)
+    private readonly userRepository: Repository<User>,
+  ) {}
 
-  findAll() {
-    return `This action returns all auth`;
-  }
+  /**
+   * Valida las credenciales del usuario
+   * @param loginDto - Credenciales de login (email y password)
+   * @returns Información del usuario autenticado
+   */
+  async login(loginDto: LoginDto) {
+    const { email, password } = loginDto;
 
-  findOne(id: number) {
-    return `This action returns a #${id} auth`;
-  }
+    // Buscar usuario por email e incluir el password
+    const user = await this.userRepository.findOne({
+      where: { email: email.toLowerCase() },
+      select: ['id', 'email', 'password', 'name', 'role', 'isActive', 'avatarUrl', 'phone'],
+    });
 
-  update(id: number, updateAuthDto: UpdateAuthDto) {
-    return `This action updates a #${id} auth`;
-  }
+    // Verificar si el usuario existe
+    if (!user) {
+      throw new UnauthorizedException('Credenciales inválidas');
+    }
 
-  remove(id: number) {
-    return `This action removes a #${id} auth`;
+    // Verificar si el usuario está activo
+    if (!user.isActive) {
+      throw new UnauthorizedException('Usuario inactivo. Contacte al administrador.');
+    }
+
+    // Comparar contraseñas
+    const isPasswordValid = await bcrypt.compare(password, user.password);
+
+    if (!isPasswordValid) {
+      throw new UnauthorizedException('Credenciales inválidas');
+    }
+
+    // Eliminar password del objeto de respuesta
+    const { password: _, ...userWithoutPassword } = user;
+
+    return {
+      message: 'Login exitoso',
+      user: userWithoutPassword,
+    };
   }
 }
