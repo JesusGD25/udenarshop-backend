@@ -7,6 +7,7 @@ import {
   IsOptional,
   IsPositive,
   IsString,
+  IsUUID,
   Min,
   MinLength,
 } from 'class-validator';
@@ -101,4 +102,12 @@ export class CreateProductDto {
   @IsBoolean()
   @IsOptional()
   isSold?: boolean;
+
+  /**
+   * ID de la categoría del producto
+   * - Obligatorio
+   * - Debe ser un UUID válido
+   */
+  @IsUUID()
+  categoryId: string;
 }
