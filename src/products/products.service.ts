@@ -7,13 +7,15 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Repository, ILike, Between, In } from 'typeorm';
 import { PaginationDto } from '../common/dto/pagination.dto';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
+import { SearchProductsDto } from './dto/search-products.dto';
 import { Product } from './entities/product.entity';
 import { User } from '../users/entities/user.entity';
 import { Category } from '../categories/entities/category.entity';
+import { AiService } from '../ai/ai.service';
 
 
 @Injectable()
@@ -28,6 +30,7 @@ export class ProductsService {
     private readonly userRepository: Repository<User>,
     @InjectRepository(Category)
     private readonly categoryRepository: Repository<Category>,
+    private readonly aiService: AiService,
   ) {}
 
   
@@ -113,6 +116,165 @@ export class ProductsService {
           createdAt: 'DESC',
         },
       });
+
+      return products;
+    } catch (error) {
+      this.handleDBExceptions(error);
+    }
+  }
+
+  /**
+   * Búsqueda avanzada de productos con filtros
+   * @param searchDto - Parámetros de búsqueda y filtros
+   */
+  async search(searchDto: SearchProductsDto) {
+    const {
+      search,
+      categories,
+      minPrice,
+      maxPrice,
+      condition,
+      sortBy = 'recent',
+      page = 1,
+      limit = 20,
+    } = searchDto;
+
+    try {
+      const queryBuilder = this.productRepository
+        .createQueryBuilder('product')
+        .leftJoinAndSelect('product.seller', 'seller')
+        .leftJoinAndSelect('product.category', 'category');
+
+      // Filtro de búsqueda por texto con IA (título o descripción)
+      if (search && search.trim()) {
+        // Generar términos de búsqueda relacionados usando IA
+        const searchTerms = await this.aiService.generateSearchTerms(search);
+        console.log(`🤖 Búsqueda inteligente: "${search}" → [${searchTerms.join(', ')}]`);
+
+        // Crear condiciones OR para cada término generado
+        const conditions = searchTerms.map((_, index) => 
+          `(LOWER(product.title) LIKE LOWER(:term${index}) OR LOWER(product.description) LIKE LOWER(:term${index}))`
+        ).join(' OR ');
+
+        // Crear parámetros para cada término
+        const params = searchTerms.reduce((acc, term, index) => ({
+          ...acc,
+          [`term${index}`]: `%${term}%`
+        }), {});
+
+        queryBuilder.andWhere(`(${conditions})`, params);
+      }
+
+      // Filtro por categorías
+      if (categories && categories.length > 0) {
+        queryBuilder.andWhere('product.categoryId IN (:...categories)', { categories });
+      }
+
+      // Filtro por rango de precios
+      if (minPrice !== undefined && maxPrice !== undefined) {
+        queryBuilder.andWhere('product.price BETWEEN :minPrice AND :maxPrice', {
+          minPrice,
+          maxPrice,
+        });
+      } else if (minPrice !== undefined) {
+        queryBuilder.andWhere('product.price >= :minPrice', { minPrice });
+      } else if (maxPrice !== undefined) {
+        queryBuilder.andWhere('product.price <= :maxPrice', { maxPrice });
+      }
+
+      // Filtro por condición
+      if (condition) {
+        queryBuilder.andWhere('product.condition = :condition', { condition });
+      }
+
+      // Ordenamiento
+      switch (sortBy) {
+        case 'price_asc':
+          queryBuilder.orderBy('product.price', 'ASC');
+          break;
+        case 'price_desc':
+          queryBuilder.orderBy('product.price', 'DESC');
+          break;
+        case 'relevant':
+          // Si hay búsqueda, ordenar por relevancia (productos con match en título primero)
+          if (search && search.trim()) {
+            queryBuilder
+              .addSelect(
+                `CASE 
+                  WHEN LOWER(product.title) LIKE LOWER(:searchExact) THEN 1 
+                  WHEN LOWER(product.title) LIKE LOWER(:searchStart) THEN 2 
+                  ELSE 3 
+                END`,
+                'relevance'
+              )
+              .setParameter('searchExact', `${search}`)
+              .setParameter('searchStart', `${search}%`)
+              .orderBy('relevance', 'ASC')
+              .addOrderBy('product.createdAt', 'DESC');
+          } else {
+            queryBuilder.orderBy('product.createdAt', 'DESC');
+          }
+          break;
+        case 'recent':
+        default:
+          queryBuilder.orderBy('product.createdAt', 'DESC');
+          break;
+      }
+
+      // Paginación
+      const offset = (page - 1) * limit;
+      queryBuilder.skip(offset).take(limit);
+
+      // Ejecutar query y obtener total
+      const [products, total] = await queryBuilder.getManyAndCount();
+
+      return {
+        products,
+        total,
+        page,
+        limit,
+        totalPages: Math.ceil(total / limit),
+      };
+    } catch (error) {
+      this.handleDBExceptions(error);
+    }
+  }
+
+  /**
+   * Obtener productos recientes
+   * @param limit - Número de productos a retornar (default: 8)
+   */
+  async findRecent(limit: number = 8): Promise<Product[]> {
+    try {
+      const products = await this.productRepository.find({
+        relations: ['seller', 'category'],
+        where: { isSold: false },
+        order: { createdAt: 'DESC' },
+        take: limit,
+      });
+
+      return products;
+    } catch (error) {
+      this.handleDBExceptions(error);
+    }
+  }
+
+  /**
+   * Obtener productos populares (por rating y reseñas)
+   * @param limit - Número de productos a retornar (default: 8)
+   */
+  async findPopular(limit: number = 8): Promise<Product[]> {
+    try {
+      const products = await this.productRepository
+        .createQueryBuilder('product')
+        .leftJoinAndSelect('product.seller', 'seller')
+        .leftJoinAndSelect('product.category', 'category')
+        .where('product.isSold = :isSold', { isSold: false })
+        .orderBy('product.rating', 'DESC')
+        .addOrderBy('product.totalReviews', 'DESC')
+        .addOrderBy('product.createdAt', 'DESC')
+        .take(limit)
+        .getMany();
 
       return products;
     } catch (error) {

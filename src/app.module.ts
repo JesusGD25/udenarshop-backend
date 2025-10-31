@@ -18,12 +18,16 @@ import { MessagesModule } from './messages/messages.module';
 import { NotificationsModule } from './notifications/notifications.module';
 import { JwtAuthGuard } from './auth/guards/jwt-auth.guard';
 import { RolesGuard } from './auth/guards/roles.guard';
+import { UploadModule } from './upload/upload.module';
+import { AiModule } from './ai/ai.module';
 
 
 
 @Module({
   imports: [
-    ConfigModule.forRoot(),
+    ConfigModule.forRoot({
+      isGlobal: true, // Hace que ConfigModule esté disponible en todos los módulos
+    }),
 
     TypeOrmModule.forRoot({
       type: 'postgres',
@@ -63,6 +67,10 @@ import { RolesGuard } from './auth/guards/roles.guard';
     MessagesModule,
 
     NotificationsModule,
+
+    UploadModule,
+
+    AiModule,
 
  
   ],

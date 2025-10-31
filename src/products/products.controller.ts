@@ -12,6 +12,7 @@ import { ApiTags, ApiBearerAuth, ApiOperation, ApiResponse } from '@nestjs/swagg
 import { ProductsService } from './products.service';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
+import { SearchProductsDto } from './dto/search-products.dto';
 import { PaginationDto } from '../common/dto/pagination.dto';
 import { Public } from '../auth/decorators/public.decorator';
 import { Roles } from '../auth/decorators/roles.decorator';
@@ -83,6 +84,60 @@ export class ProductsController {
   })
   findAll(@Query() paginationDto: PaginationDto) {
     return this.productsService.findAll(paginationDto);
+  }
+
+  /**
+   * Búsqueda avanzada de productos con filtros
+   * Ruta pública - no requiere autenticación
+   */
+  @Public()
+  @Get('search')
+  @ApiOperation({ 
+    summary: 'Búsqueda avanzada de productos',
+    description: '**Ruta pública**\n\nBusca productos con filtros por texto, categorías, precios, condición y ordenamiento.'
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'Resultados de búsqueda obtenidos exitosamente',
+  })
+  search(@Query() searchDto: SearchProductsDto) {
+    return this.productsService.search(searchDto);
+  }
+
+  /**
+   * Obtener productos recientes
+   * Ruta pública - no requiere autenticación
+   */
+  @Public()
+  @Get('recent')
+  @ApiOperation({ 
+    summary: 'Obtener productos recientes',
+    description: '**Ruta pública**\n\nRetorna los productos más recientemente publicados.'
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'Productos recientes obtenidos exitosamente',
+  })
+  findRecent(@Query('limit') limit: number = 8) {
+    return this.productsService.findRecent(limit);
+  }
+
+  /**
+   * Obtener productos populares
+   * Ruta pública - no requiere autenticación
+   */
+  @Public()
+  @Get('popular')
+  @ApiOperation({ 
+    summary: 'Obtener productos populares',
+    description: '**Ruta pública**\n\nRetorna los productos más populares por visualizaciones y favoritos.'
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'Productos populares obtenidos exitosamente',
+  })
+  findPopular(@Query('limit') limit: number = 8) {
+    return this.productsService.findPopular(limit);
   }
 
   /**
