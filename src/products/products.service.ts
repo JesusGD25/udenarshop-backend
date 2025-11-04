@@ -128,6 +128,7 @@ export class ProductsService {
    * @param searchDto - Parámetros de búsqueda y filtros
    */
   async search(searchDto: SearchProductsDto) {
+
     const {
       search,
       categories,
@@ -165,9 +166,14 @@ export class ProductsService {
         queryBuilder.andWhere(`(${conditions})`, params);
       }
 
-      // Filtro por categorías
-      if (categories && categories.length > 0) {
-        queryBuilder.andWhere('product.categoryId IN (:...categories)', { categories });
+      // --- PARCHE: Forzar que categories sea siempre un array ---
+      let categoriesArray = categories;
+      if (typeof categoriesArray === 'string') {
+        categoriesArray = [categoriesArray];
+      }
+      console.log('Filtro recibido categories:', categoriesArray, typeof categoriesArray, Array.isArray(categoriesArray));
+      if (categoriesArray && categoriesArray.length > 0) {
+        queryBuilder.andWhere('product.categoryId IN (:...categories)', { categories: categoriesArray });
       }
 
       // Filtro por rango de precios

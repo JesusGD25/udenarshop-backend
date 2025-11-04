@@ -1,5 +1,5 @@
 import { IsOptional, IsString, IsNumber, Min, Max, IsArray } from 'class-validator';
-import { Type } from 'class-transformer';
+import { Type, Transform } from 'class-transformer';
 import { ApiPropertyOptional } from '@nestjs/swagger';
 
 export class SearchProductsDto {
@@ -16,6 +16,8 @@ export class SearchProductsDto {
     example: ['uuid-1', 'uuid-2'],
     type: [String],
   })
+  @Transform(({ value }) => Array.isArray(value) ? value : value ? [value] : [])
+  @Type(() => String)
   @IsOptional()
   @IsArray()
   @IsString({ each: true })
