@@ -1,34 +1,19 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
-import { OrderItemsService } from './order-items.service';
-import { CreateOrderItemDto } from './dto/create-order-item.dto';
-import { UpdateOrderItemDto } from './dto/update-order-item.dto';
+/**
+ * OrderItemsController
+ * 
+ * NOTA: Este controller NO se utiliza.
+ * Los OrderItems se crean automáticamente al generar órdenes.
+ * 
+ * Los OrderItems se consultan a través de las relaciones de Order:
+ * - GET /orders/:orderId - Retorna la orden con sus items
+ * - GET /orders         - Retorna las órdenes del usuario con sus items
+ * 
+ * Los OrderItems son de solo lectura y no se modifican después de crearse.
+ * Representan un snapshot inmutable de los productos al momento de la compra.
+ * 
+ * Este archivo se mantiene por compatibilidad con la estructura del módulo,
+ * pero no se registra en OrderItemsModule.
+ */
 
-@Controller('order-items')
-export class OrderItemsController {
-  constructor(private readonly orderItemsService: OrderItemsService) {}
-
-  @Post()
-  create(@Body() createOrderItemDto: CreateOrderItemDto) {
-    return this.orderItemsService.create(createOrderItemDto);
-  }
-
-  @Get()
-  findAll() {
-    return this.orderItemsService.findAll();
-  }
-
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.orderItemsService.findOne(+id);
-  }
-
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateOrderItemDto: UpdateOrderItemDto) {
-    return this.orderItemsService.update(+id, updateOrderItemDto);
-  }
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.orderItemsService.remove(+id);
-  }
-}
+// Controller deshabilitado - No se usa
+// Los OrderItems se crean automáticamente desde OrdersService

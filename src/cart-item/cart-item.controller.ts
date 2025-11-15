@@ -1,34 +1,18 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
-import { CartItemService } from './cart-item.service';
-import { CreateCartItemDto } from './dto/create-cart-item.dto';
-import { UpdateCartItemDto } from './dto/update-cart-item.dto';
+/**
+ * CartItemController
+ * 
+ * NOTA: Este controller NO se utiliza.
+ * Los CartItems se manejan a través de CartController.
+ * 
+ * Endpoints disponibles en CartController:
+ * - POST   /cart/add              - Agregar producto al carrito
+ * - PATCH  /cart/items/:itemId    - Actualizar cantidad de un item
+ * - DELETE /cart/items/:itemId    - Eliminar item del carrito
+ * - DELETE /cart/clear            - Vaciar el carrito
+ * 
+ * Este archivo se mantiene por compatibilidad con la estructura del módulo,
+ * pero no se registra en CartItemModule.
+ */
 
-@Controller('cart-item')
-export class CartItemController {
-  constructor(private readonly cartItemService: CartItemService) {}
-
-  @Post()
-  create(@Body() createCartItemDto: CreateCartItemDto) {
-    return this.cartItemService.create(createCartItemDto);
-  }
-
-  @Get()
-  findAll() {
-    return this.cartItemService.findAll();
-  }
-
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.cartItemService.findOne(+id);
-  }
-
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateCartItemDto: UpdateCartItemDto) {
-    return this.cartItemService.update(+id, updateCartItemDto);
-  }
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.cartItemService.remove(+id);
-  }
-}
+// Controller deshabilitado - No se usa
+// Los endpoints están en CartController
